@@ -2,8 +2,6 @@
 
 Ruby client for the [MD Integrations](https://mdintegrations.com) Partner API. Internal Rugiet wrapper that covers patients, cases, offerings, messages, files, and webhook signature verification.
 
-Pattern mirrors our existing [`openloop_client`](https://github.com/MSBHoldingsInc/openloop-client) gem.
-
 ## Installation
 
 Add this line to your application's Gemfile:
