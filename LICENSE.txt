@@ -1,0 +1,19 @@
+Copyright (c) 2026 MSB Holdings Inc. (d/b/a Rugiet). All rights reserved.
+
+This software and associated documentation files (the "Software") are the
+proprietary and confidential property of MSB Holdings Inc. The Software is
+licensed, not sold, and is provided solely for internal use by MSB Holdings
+Inc. and its authorized affiliates, employees, and contractors in connection
+with the operation of Rugiet products and services.
+
+No license, express or implied, is granted to any other person or entity to
+use, copy, modify, merge, publish, distribute, sublicense, sell, or otherwise
+exploit the Software, in whole or in part, without the prior written consent
+of MSB Holdings Inc.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -1,0 +1,35 @@
+require 'md_integrations/version'
+require 'md_integrations/errors'
+require 'md_integrations/configuration'
+require 'md_integrations/auth/token_manager'
+require 'md_integrations/connection'
+
+require 'md_integrations/resources/base'
+require 'md_integrations/resources/patients'
+require 'md_integrations/resources/cases'
+require 'md_integrations/resources/offerings'
+require 'md_integrations/resources/orders'
+require 'md_integrations/resources/messages'
+require 'md_integrations/resources/files'
+require 'md_integrations/resources/diseases'
+require 'md_integrations/resources/pharmacies'
+require 'md_integrations/resources/dispense_units'
+require 'md_integrations/resources/questionnaires'
+require 'md_integrations/resources/clinicians'
+require 'md_integrations/resources/partner'
+require 'md_integrations/resources/metadata'
+require 'md_integrations/resources/vouchers'
+require 'md_integrations/resources/specialties'
+require 'md_integrations/resources/subscriptions'
+require 'md_integrations/resources/tags'
+require 'md_integrations/resources/notifications'
+require 'md_integrations/resources/support_staffs'
+
+require 'md_integrations/webhook/event_types'
+require 'md_integrations/webhook/event'
+require 'md_integrations/webhook/verifier'
+
+require 'md_integrations/client'
+
+module MdIntegrations
+end
