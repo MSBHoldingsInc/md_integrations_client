@@ -32,7 +32,7 @@ module MdIntegrations
     end
 
     def post_multipart(path, parts = {}, retried: false)
-      response = faraday.post(path) do |req|
+      response = faraday.post(full_url(path)) do |req|
         req.headers['Authorization'] = "Bearer #{token_manager.access_token}"
         req.headers['Accept']        = JSON_CONTENT_TYPE
         req.body = parts
@@ -54,7 +54,7 @@ module MdIntegrations
 
     def request(method, path, params: nil, body: nil, retried: false)
       response = faraday.public_send(method) do |req|
-        req.url path
+        req.url full_url(path)
         req.headers['Authorization'] = "Bearer #{token_manager.access_token}"
         req.headers['Content-Type']  = JSON_CONTENT_TYPE
         req.headers['Accept']        = JSON_CONTENT_TYPE
@@ -70,6 +70,14 @@ module MdIntegrations
       handle_response(response, method: method, path: path)
     rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
       raise NetworkError, "Network error talking to MDI: #{e.message}"
+    end
+
+    # Build the absolute URL by string concatenation so the /v1 prefix in
+    # base_url is preserved regardless of whether the path has a leading `/`.
+    # Standard Faraday URL join (RFC 3986) would drop /v1 when path starts
+    # with `/`, which we don't want.
+    def full_url(path)
+      "#{configuration.base_url}#{path}"
     end
 
     def handle_response(response, method:, path:)

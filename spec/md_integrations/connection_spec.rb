@@ -38,7 +38,7 @@ RSpec.describe MdIntegrations::Connection do
 
     it 'does not log request or response bodies' do
       payload = { secret_field: 'PHI-DO-NOT-LOG' }
-      stub_request(:post, "#{MdIntegrations::Configuration::BASE_URL}/v1/partner/patients")
+      stub_request(:post, "#{MdIntegrations::Configuration::BASE_URL}/partner/patients")
         .to_return(status: 200, body: { sensitive: 'RESPONSE-PHI' }.to_json)
 
       client.patients.create(payload)

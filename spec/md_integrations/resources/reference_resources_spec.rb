@@ -26,7 +26,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     let(:pharmacies) { mdi_client.pharmacies }
 
     it 'lists pharmacies' do
-      stub = stub_mdi(:get, '/v1/partner/pharmacies',
+      stub = stub_mdi(:get, '/partner/pharmacies',
                       query: { search: 'TPH' },
                       response_body: { data: [] })
 
@@ -35,7 +35,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     end
 
     it 'finds a pharmacy' do
-      stub = stub_mdi(:get, '/v1/partner/pharmacies/ph1',
+      stub = stub_mdi(:get, '/partner/pharmacies/ph1',
                       response_body: { id: 'ph1' })
 
       pharmacies.find('ph1')
@@ -43,7 +43,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     end
 
     it 'lists partner-linked pharmacies with default pagination' do
-      stub = stub_mdi(:get, '/v1/partner/linked-pharmacies',
+      stub = stub_mdi(:get, '/partner/linked-pharmacies',
                       query: { page: '1', per_page: '100' },
                       response_body: { data: [] })
 
@@ -94,7 +94,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
 
   describe MdIntegrations::Resources::Specialties do
     it 'lists specialties' do
-      stub = stub_mdi(:get, '/v1/partner/specialties',
+      stub = stub_mdi(:get, '/partner/specialties',
                       response_body: { data: [] })
 
       mdi_client.specialties.list
@@ -106,7 +106,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     let(:metadata) { mdi_client.metadata }
 
     it 'fetches states' do
-      stub = stub_mdi(:get, '/v1/partner/metadata/states',
+      stub = stub_mdi(:get, '/partner/metadata/states',
                       response_body: { data: [] })
 
       metadata.states
@@ -114,7 +114,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     end
 
     it 'fetches cities for a state without search filter' do
-      stub = stub_mdi(:get, '/v1/partner/metadata/states/TX/cities',
+      stub = stub_mdi(:get, '/partner/metadata/states/TX/cities',
                       response_body: { data: [] })
 
       metadata.cities('TX')
@@ -122,7 +122,7 @@ RSpec.describe 'Reference + catalog resources', :mdi do
     end
 
     it 'fetches cities with a search filter' do
-      stub = stub_mdi(:get, '/v1/partner/metadata/states/TX/cities',
+      stub = stub_mdi(:get, '/partner/metadata/states/TX/cities',
                       query: { search: 'austin' },
                       response_body: { data: [] })
 

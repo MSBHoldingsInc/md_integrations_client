@@ -6,7 +6,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   let(:message_id) { 'm1' }
 
   it 'lists messages with default patient channel' do
-    stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/messages",
+    stub = stub_mdi(:get, "/partner/patients/#{patient_id}/messages",
                     query: { channel: 'patient' },
                     response_body: { data: [] })
 
@@ -15,7 +15,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   end
 
   it 'finds a single message' do
-    stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/messages/#{message_id}",
+    stub = stub_mdi(:get, "/partner/patients/#{patient_id}/messages/#{message_id}",
                     response_body: { id: message_id })
 
     messages.find(patient_id, message_id)
@@ -23,7 +23,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   end
 
   it 'sends a message with default channel' do
-    stub = stub_mdi(:post, "/v1/partner/patients/#{patient_id}/messages",
+    stub = stub_mdi(:post, "/partner/patients/#{patient_id}/messages",
                     request_body: { text: 'hi', channel: 'patient' }.to_json,
                     response_body: { id: message_id })
 
@@ -32,7 +32,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   end
 
   it 'sends a message with attachments and custom channel' do
-    stub = stub_mdi(:post, "/v1/partner/patients/#{patient_id}/messages",
+    stub = stub_mdi(:post, "/partner/patients/#{patient_id}/messages",
                     request_body: {
                       text: 'hi',
                       channel: 'support',
@@ -50,7 +50,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   end
 
   it 'marks a message read' do
-    stub = stub_mdi(:post, "/v1/partner/patients/#{patient_id}/messages/#{message_id}/read",
+    stub = stub_mdi(:post, "/partner/patients/#{patient_id}/messages/#{message_id}/read",
                     response_body: { ok: true })
 
     messages.mark_read(patient_id, message_id)
@@ -58,7 +58,7 @@ RSpec.describe MdIntegrations::Resources::Messages, :mdi do
   end
 
   it 'marks a message unread' do
-    stub = stub_mdi(:delete, "/v1/partner/patients/#{patient_id}/messages/#{message_id}/unread",
+    stub = stub_mdi(:delete, "/partner/patients/#{patient_id}/messages/#{message_id}/unread",
                     response_body: { ok: true })
 
     messages.mark_unread(patient_id, message_id)

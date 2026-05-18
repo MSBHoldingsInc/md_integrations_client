@@ -4,13 +4,13 @@ module MdIntegrations
     # (Diseases are exposed as their own resource since they're commonly used.)
     class Metadata < Base
       def states
-        connection.get('/v1/partner/metadata/states')
+        connection.get('/partner/metadata/states')
       end
 
       def cities(state_id, search: nil)
         params = {}
         params[:search] = search if search
-        connection.get("/v1/partner/metadata/states/#{state_id}/cities", params)
+        connection.get("/partner/metadata/states/#{state_id}/cities", params)
       end
 
       def zipcode_lookup(zipcode)
