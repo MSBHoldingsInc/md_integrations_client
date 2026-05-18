@@ -5,9 +5,9 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
   let(:patient_id) { 'pat-uuid-1' }
 
   describe '#create' do
-    it 'POSTs to /partner/patients' do
+    it 'POSTs to /v1/partner/patients' do
       payload = { first_name: 'John', last_name: 'Doe', email: 'j@d.co' }
-      stub = stub_mdi(:post, '/partner/patients',
+      stub = stub_mdi(:post, '/v1/partner/patients',
                       request_body: payload.to_json,
                       response_body: { id: patient_id })
 
@@ -17,9 +17,9 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
   end
 
   describe '#update' do
-    it 'PATCHes /partner/patients/:id' do
+    it 'PATCHes /v1/partner/patients/:id' do
       payload = { address: { city_name: 'Austin' } }
-      stub = stub_mdi(:patch, "/partner/patients/#{patient_id}",
+      stub = stub_mdi(:patch, "/v1/partner/patients/#{patient_id}",
                       request_body: payload.to_json,
                       response_body: { id: patient_id })
 
@@ -51,8 +51,8 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
   end
 
   describe '#cases' do
-    it 'GETs /partner/patients/:id/cases with params' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/cases",
+    it 'GETs /v1/partner/patients/:id/cases with params' do
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/cases",
                       query: { status: 'completed' },
                       response_body: { data: [] })
 
@@ -62,8 +62,8 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
   end
 
   describe '#events' do
-    it 'GETs /partner/patients/:id/events with default pagination' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/events",
+    it 'GETs /v1/partner/patients/:id/events with default pagination' do
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/events",
                       query: { page: '1', per_page: '50' },
                       response_body: { data: [] })
 
@@ -74,7 +74,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
 
   describe 'workflow URLs' do
     it 'GETs drivers-license' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/drivers-license",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/drivers-license",
                       query: { fullscreen: 'true' },
                       response_body: { url: 'https://x' })
 
@@ -83,7 +83,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'GETs intro-video' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/intro-video",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/intro-video",
                       query: { fullscreen: 'true' },
                       response_body: { url: 'https://x' })
 
@@ -92,7 +92,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'GETs messaging auth url with case_id when given' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/auth",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/auth",
                       query: { full: 'true', fullscreen: 'true', case_id: 'c1' },
                       response_body: { url: 'https://x' })
 
@@ -101,7 +101,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'GETs file-url' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/file-url",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/file-url",
                       query: { fullscreen: 'true' },
                       response_body: { url: 'https://x' })
 
@@ -112,7 +112,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
 
   describe 'preferred pharmacies' do
     it 'lists preferred pharmacies' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/pharmacies",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/pharmacies",
                       query: { sort: 'updated_at', order: 'desc' },
                       response_body: { data: [] })
 
@@ -121,7 +121,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'POSTs to add a preferred pharmacy' do
-      stub = stub_mdi(:post, "/partner/patients/#{patient_id}/pharmacies/ph1",
+      stub = stub_mdi(:post, "/v1/partner/patients/#{patient_id}/pharmacies/ph1",
                       response_body: { ok: true })
 
       patients.add_preferred_pharmacy(patient_id, 'ph1')
@@ -129,7 +129,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'DELETEs to remove a preferred pharmacy' do
-      stub = stub_mdi(:delete, "/partner/patients/#{patient_id}/pharmacies/ph1",
+      stub = stub_mdi(:delete, "/v1/partner/patients/#{patient_id}/pharmacies/ph1",
                       response_body: { ok: true })
 
       patients.remove_preferred_pharmacy(patient_id, 'ph1')
@@ -161,7 +161,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
 
   describe 'exams' do
     it 'lists exams' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/exams",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/exams",
                       response_body: { data: [] })
 
       patients.exams(patient_id)
@@ -169,7 +169,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'fetches a single exam' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/exams/ex1",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/exams/ex1",
                       response_body: { id: 'ex1' })
 
       patients.exam(patient_id, 'ex1')
@@ -178,8 +178,8 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
   end
 
   describe '#vouchers' do
-    it 'GETs /partner/patients/:id/vouchers' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/vouchers",
+    it 'GETs /v1/partner/patients/:id/vouchers' do
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/vouchers",
                       response_body: { data: [] })
 
       patients.vouchers(patient_id)
@@ -198,7 +198,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'fetches medications history' do
-      stub = stub_mdi(:get, "/partner/patients/#{patient_id}/dosespot/medications/history",
+      stub = stub_mdi(:get, "/v1/partner/patients/#{patient_id}/dosespot/medications/history",
                       response_body: { data: [] })
 
       patients.dosespot_medications_history(patient_id)
@@ -208,7 +208,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
 
   describe 'tags' do
     it 'attaches a tag' do
-      stub = stub_mdi(:post, "/partner/patients/#{patient_id}/tags/tag1",
+      stub = stub_mdi(:post, "/v1/partner/patients/#{patient_id}/tags/tag1",
                       response_body: { ok: true })
 
       patients.attach_tag(patient_id, 'tag1')
@@ -216,7 +216,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'detaches a tag' do
-      stub = stub_mdi(:delete, "/partner/patients/#{patient_id}/tags/tag1",
+      stub = stub_mdi(:delete, "/v1/partner/patients/#{patient_id}/tags/tag1",
                       response_body: { ok: true })
 
       patients.detach_tag(patient_id, 'tag1')
@@ -225,7 +225,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
 
     it 'updates a tag note' do
       payload = { note: 'VIP' }
-      stub = stub_mdi(:patch, "/partner/patients/#{patient_id}/tags/tag1",
+      stub = stub_mdi(:patch, "/v1/partner/patients/#{patient_id}/tags/tag1",
                       request_body: payload.to_json,
                       response_body: { ok: true })
 
@@ -257,7 +257,7 @@ RSpec.describe MdIntegrations::Resources::Patients, :mdi do
     end
 
     it 'requests data deletion' do
-      stub = stub_mdi(:delete, "/partner/patients/#{patient_id}",
+      stub = stub_mdi(:delete, "/v1/partner/patients/#{patient_id}",
                       response_body: { ok: true })
 
       patients.request_data_deletion(patient_id)

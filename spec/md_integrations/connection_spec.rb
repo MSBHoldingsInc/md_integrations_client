@@ -7,10 +7,10 @@ RSpec.describe MdIntegrations::Connection do
   let(:logger) { Logger.new(log_io) }
   let(:client) do
     MdIntegrations::Client.new(
-      client_id:     'cid',
+      client_id: 'cid',
       client_secret: 'csecret',
-      environment:   :sandbox,
-      logger:        logger
+      environment: :sandbox,
+      logger: logger
     )
   end
   let(:token_url) { "#{MdIntegrations::Configuration::BASE_URL}#{MdIntegrations::Auth::TokenManager::AUTH_PATH}" }
@@ -19,8 +19,8 @@ RSpec.describe MdIntegrations::Connection do
   before do
     stub_request(:post, token_url)
       .to_return(
-        status:  200,
-        body:    { access_token: secret_token, expires_in: 86_400 }.to_json,
+        status: 200,
+        body: { access_token: secret_token, expires_in: 86_400 }.to_json,
         headers: { 'Content-Type' => 'application/json' }
       )
   end
@@ -38,7 +38,7 @@ RSpec.describe MdIntegrations::Connection do
 
     it 'does not log request or response bodies' do
       payload = { secret_field: 'PHI-DO-NOT-LOG' }
-      stub_request(:post, "#{MdIntegrations::Configuration::BASE_URL}/partner/patients")
+      stub_request(:post, "#{MdIntegrations::Configuration::BASE_URL}/v1/partner/patients")
         .to_return(status: 200, body: { sensitive: 'RESPONSE-PHI' }.to_json)
 
       client.patients.create(payload)
