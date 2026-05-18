@@ -3,7 +3,12 @@ module MdIntegrations
     # MDI uses the same base URL for both sandbox and production.
     # Sandbox vs production traffic is distinguished by which credentials
     # (client_id / client_secret) you authenticate with.
-    BASE_URL = 'https://api.mdintegrations.com'.freeze
+    #
+    # `/v1` is baked into the base URL — every Partner API endpoint is served
+    # under /v1. Resource paths keep their leading `/` (e.g. `/partner/cases`);
+    # Connection builds the full URL via string concatenation so the `/v1`
+    # prefix is always preserved regardless of leading-slash semantics.
+    BASE_URL = 'https://api.mdintegrations.com/v1'.freeze
 
     ENVIRONMENTS = %i[sandbox production].freeze
 

@@ -15,7 +15,7 @@ module MdIntegrations
       # refresh in lockstep when their tokens reach the 22-hour mark.
       REFRESH_JITTER_SECONDS    = 60
 
-      AUTH_PATH  = '/v1/partner/auth/token'.freeze
+      AUTH_PATH  = '/partner/auth/token'.freeze
       GRANT_TYPE = 'client_credentials'.freeze
       SCOPE      = '*'.freeze
 
@@ -51,7 +51,7 @@ module MdIntegrations
       end
 
       def fetch_new_token!
-        response = auth_connection.post(AUTH_PATH) do |req|
+        response = auth_connection.post("#{configuration.base_url}#{AUTH_PATH}") do |req|
           req.headers['Content-Type'] = 'application/json'
           req.headers['Accept']       = 'application/json'
           req.body = JSON.generate(

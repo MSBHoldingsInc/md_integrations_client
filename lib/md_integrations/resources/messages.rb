@@ -5,25 +5,25 @@ module MdIntegrations
       CHANNEL_SUPPORT = 'support'.freeze
 
       def list(patient_id, params = { channel: CHANNEL_PATIENT })
-        connection.get("/v1/partner/patients/#{patient_id}/messages", params)
+        connection.get("/partner/patients/#{patient_id}/messages", params)
       end
 
       def find(patient_id, message_id)
-        connection.get("/v1/partner/patients/#{patient_id}/messages/#{message_id}")
+        connection.get("/partner/patients/#{patient_id}/messages/#{message_id}")
       end
 
       # Supports optional `files: [{id: 'file-uuid'}]` and `reference_message_id` via **extra.
       def send_message(patient_id:, text:, channel: CHANNEL_PATIENT, **extra)
         payload = { text: text, channel: channel }.merge(extra)
-        connection.post("/v1/partner/patients/#{patient_id}/messages", payload)
+        connection.post("/partner/patients/#{patient_id}/messages", payload)
       end
 
       def mark_read(patient_id, message_id)
-        connection.post("/v1/partner/patients/#{patient_id}/messages/#{message_id}/read")
+        connection.post("/partner/patients/#{patient_id}/messages/#{message_id}/read")
       end
 
       def mark_unread(patient_id, message_id)
-        connection.delete("/v1/partner/patients/#{patient_id}/messages/#{message_id}/unread")
+        connection.delete("/partner/patients/#{patient_id}/messages/#{message_id}/unread")
       end
 
       # Get a notification record (e.g., for tracing a SMS/email MDI sent).

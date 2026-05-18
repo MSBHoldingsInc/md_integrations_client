@@ -3,7 +3,7 @@ module MdIntegrations
     # Pharmacy directory + partner-linked pharmacy listing.
     # Use this to look up DoseSpot pharmacy IDs (e.g., for TPH).
     class Pharmacies < Base
-      BASE_PATH = '/v1/partner/pharmacies'.freeze
+      BASE_PATH = '/partner/pharmacies'.freeze
 
       def list(params = {})
         connection.get(BASE_PATH, params)
@@ -16,7 +16,7 @@ module MdIntegrations
       # Pharmacies linked to the authenticated partner (e.g., TPH if MDI
       # has connected it at the partner level).
       def linked(params = { page: 1, per_page: 100 })
-        connection.get('/v1/partner/linked-pharmacies', params)
+        connection.get('/partner/linked-pharmacies', params)
       end
     end
   end

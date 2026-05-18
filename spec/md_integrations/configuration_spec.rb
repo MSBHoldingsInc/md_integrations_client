@@ -6,9 +6,9 @@ RSpec.describe MdIntegrations::Configuration do
   end
 
   describe '#initialize' do
-    it 'defaults base_url to MDI production host' do
+    it 'defaults base_url to MDI production host (v1)' do
       config = described_class.new(**valid_args)
-      expect(config.base_url).to eq('https://api.mdintegrations.com')
+      expect(config.base_url).to eq('https://api.mdintegrations.com/v1')
     end
 
     it 'accepts an explicit base_url override' do
