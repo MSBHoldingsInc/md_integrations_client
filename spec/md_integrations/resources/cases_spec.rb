@@ -275,6 +275,16 @@ RSpec.describe MdIntegrations::Resources::Cases, :mdi do
     end
   end
 
+  describe '#prescriptions' do
+    it 'GETs /partner/cases/:id/prescriptions' do
+      stub = stub_mdi(:get, "/partner/cases/#{case_id}/prescriptions",
+                      response_body: { data: [] })
+
+      cases.prescriptions(case_id)
+      expect(stub).to have_been_requested
+    end
+  end
+
   describe 'PDFs' do
     it 'fetches services PDF' do
       stub = stub_mdi(:get, "/partner/cases/#{case_id}/pdf",

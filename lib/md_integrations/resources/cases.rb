@@ -138,6 +138,12 @@ module MdIntegrations
         connection.get("#{BASE_PATH}/#{case_id}/tags/historical")
       end
 
+      # === Prescriptions ===
+
+      def prescriptions(case_id)
+        connection.get("#{BASE_PATH}/#{case_id}/prescriptions")
+      end
+
       # === PDFs ===
 
       def services_pdf(case_id)
