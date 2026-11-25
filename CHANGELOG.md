@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- `Webhook::Verifier.verify` accepts MDI signatures over bodies containing U+2028/U+2029. MDI signs PHP `json_encode` output, which escapes those characters, but sends them unescaped. When the plain HMAC fails, the verifier retries it with both characters escaped.
+
 ### Added
 - `MdIntegrations::Client` entry point with sandbox/production environment switching (MDI uses the same base URL for both — environment is determined by which credentials authenticate).
 - OAuth2 `client_credentials` token manager with 24-hour TTL, 22-hour proactive refresh, random jitter (0–60s) to avoid lockstep refresh across processes, and reactive single-retry on 401.

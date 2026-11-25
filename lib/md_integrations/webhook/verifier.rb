@@ -33,6 +33,14 @@ module MdIntegrations
     class Verifier
       ALGORITHM = 'SHA256'.freeze
 
+      # PHP's json_encode escapes U+2028/U+2029 even with JSON_UNESCAPED_UNICODE,
+      # but MDI sends them unescaped, so a body carrying either character was
+      # signed over different bytes than the ones delivered.
+      PHP_ESCAPED_LINE_TERMINATORS = {
+        "\u2028" => '\u2028',
+        "\u2029" => '\u2029'
+      }.freeze
+
       class << self
         # Signature-only verification. Returns true/false. Useful when the
         # Authorization header is enforced at a different layer (e.g. an API
@@ -40,8 +48,13 @@ module MdIntegrations
         def verify(payload:, signature:, secret:)
           return false if payload.to_s.empty? || signature.to_s.empty? || secret.to_s.empty?
 
-          expected = compute_signature(payload, secret)
-          secure_compare(expected, signature)
+          return true if secure_compare(compute_signature(payload, secret), signature)
+
+          utf8_payload = payload.dup.force_encoding(Encoding::UTF_8)
+          return false unless utf8_payload.valid_encoding?
+
+          php_encoded = utf8_payload.gsub(/[\u2028\u2029]/, PHP_ESCAPED_LINE_TERMINATORS)
+          secure_compare(compute_signature(php_encoded, secret), signature)
         end
 
         def construct_event(payload:, signature:, secret:, auth_token: nil, expected_auth_token: nil)
