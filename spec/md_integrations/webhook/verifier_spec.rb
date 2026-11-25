@@ -33,6 +33,38 @@ RSpec.describe MdIntegrations::Webhook::Verifier do
     it 'returns false when signature is nil' do
       expect(described_class.verify(payload: payload, signature: nil, secret: secret)).to be false
     end
+
+    context 'when patient text contains U+2028 or U+2029' do
+      # Delivered as a Rails request.raw_post: binary-encoded, characters unescaped.
+      let(:payload) do
+        "{\"event_type\":\"offering_submitted\",\"note\":\"Lisinopril\u2028Metformin\u2029Aspirin\"}"
+          .dup.force_encoding(Encoding::BINARY)
+      end
+      let(:php_signed_body) do
+        '{"event_type":"offering_submitted","note":"Lisinopril\u2028Metformin\u2029Aspirin"}'
+      end
+      let(:php_signature) { OpenSSL::HMAC.hexdigest('SHA256', secret, php_signed_body) }
+
+      it 'accepts the signature MDI computes over the PHP json_encode output' do
+        expect(described_class.verify(payload: payload, signature: php_signature, secret: secret)).to be true
+      end
+
+      it 'still accepts a signature over the body as delivered' do
+        expect(described_class.verify(payload: payload, signature: valid_signature, secret: secret)).to be true
+      end
+
+      it 'returns false for a wrong signature' do
+        expect(described_class.verify(payload: payload, signature: 'deadbeef' * 8, secret: secret)).to be false
+      end
+    end
+
+    it 'returns false for a body that is not valid UTF-8' do
+      body = "{\"note\":\"\xFF\"}"
+             .dup.force_encoding(Encoding::BINARY)
+      signature = OpenSSL::HMAC.hexdigest('SHA256', secret, 'other')
+
+      expect(described_class.verify(payload: body, signature: signature, secret: secret)).to be false
+    end
   end
 
   describe '.construct_event' do
@@ -42,6 +74,17 @@ RSpec.describe MdIntegrations::Webhook::Verifier do
       expect(event).to be_a(MdIntegrations::Webhook::Event)
       expect(event.type).to eq('offering_submitted')
       expect(event.case_id).to eq('case-uuid')
+      expect(event.offering_submitted?).to be true
+    end
+
+    it 'returns an Event for a U+2028 body signed over the PHP json_encode output' do
+      body = "{\"event_type\":\"offering_submitted\",\"note\":\"Lisinopril\u2028Metformin\"}"
+             .dup.force_encoding(Encoding::BINARY)
+      php_signed_body = '{"event_type":"offering_submitted","note":"Lisinopril\u2028Metformin"}'
+      sig = OpenSSL::HMAC.hexdigest('SHA256', secret, php_signed_body)
+
+      event = described_class.construct_event(payload: body, signature: sig, secret: secret)
+
       expect(event.offering_submitted?).to be true
     end
 
